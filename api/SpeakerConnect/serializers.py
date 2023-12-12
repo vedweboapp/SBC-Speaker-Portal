@@ -9,6 +9,14 @@ class SpeakerTopicSerializer(serializers.ModelSerializer):
 
 
 class BiographySerializer(serializers.ModelSerializer):
+    speaker_topics = serializers.PrimaryKeyRelatedField(many=True, queryset=SpeakerTopic.objects.all())
+    speaker_tags = serializers.PrimaryKeyRelatedField(many=True, queryset=SpeakerTag.objects.all())
+    descriptive_titles = serializers.SlugRelatedField(
+        many=True,
+        queryset=DescriptiveTitles.objects.all(),
+        slug_field='title'
+    )
+
     class Meta:
         model = Biography
         fields = '__all__'
@@ -45,9 +53,27 @@ class PodcastSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer):
+    book_file = serializers.ImageField(write_only=True)
+
     class Meta:
         model = Book
-        fields = '__all__'
+        fields = ('id', 'title', 'description', 'authors', 'publisher', 'link',
+                  'cost_per_book_cad', 'bulk_order_purchase_offered', 'price_per_book_cad',
+                  'number_of_books', 'book_file')
+
+    def create(self, validated_data):
+        person_id = validated_data.pop('person_id')
+        book_file = validated_data.pop('book_file', None)
+        
+        # Retrieve the person object using the person ID
+        person = Person.objects.get(pk=person_id)
+
+        book = Book.objects.create(person=person, **validated_data)
+
+        if book_file:
+            book.upload_book_image.save(book_file.name, book_file)
+
+        return book
 
 
 class MediaMentionSerializer(serializers.ModelSerializer):
@@ -91,6 +117,10 @@ class BusinessInfoSerializer(serializers.ModelSerializer):
         model = BusinessInfo
         fields = '__all__'
 
+class PersonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Person
+        fields = '__all__'
 
 class SocialMediaBusinessSerializer(serializers.ModelSerializer):
     class Meta:
