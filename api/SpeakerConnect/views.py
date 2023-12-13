@@ -4,6 +4,7 @@ import uuid
 from django.conf import settings
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
+import requests
 from rest_framework import viewsets
 import os
 from .serializers import *
@@ -156,7 +157,7 @@ def login(request):
         return Response("Invalid username or password", status=status.HTTP_401_UNAUTHORIZED)
 
     if check_password(password, person.password):
-        return Response("Login successful!", status=status.HTTP_200_OK)
+        return Response({"message": "Login successful!", "id": person.id}, status=status.HTTP_200_OK)
     else:
         return Response("Invalid username or password", status=status.HTTP_401_UNAUTHORIZED)
 
@@ -1868,3 +1869,35 @@ def get_all_data(request, person_id):
         return Response({'error': 'Person not found with the specified person_id'}, status=404)
     except Exception as e:
         return Response({'error': str(e)}, status=400)
+    
+#------------------------------------------------------------------------------------------------------------
+
+@api_view(['GET'])
+def get_data_speakertopics(request):
+    api_url = "https://speakerscanada.com/json-api/?auth-key=sbcprivatekey&action=topics"
+
+    try:
+        response = requests.get(api_url)
+
+        if response.status_code == 200:
+            data = response.json()
+            return Response(data, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Failed to retrieve data from the external API"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def get_data_descriptivetitles(request):
+    api_url = "https://speakerscanada.com/json-api/?auth-key=sbcprivatekey&action=types"
+
+    try:
+        response = requests.get(api_url)
+
+        if response.status_code == 200:
+            data = response.json()
+            return Response(data, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Failed to retrieve data from the external API"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

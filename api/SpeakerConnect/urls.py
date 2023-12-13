@@ -66,6 +66,8 @@ urlpatterns = [
     # path('get_files/<filename>/', get_files, name='get_files'),
     path('get_files/<str:filename>/', get_files, name='get_files'),
     path('get_all_data/<int:person_id>/', get_all_data, name='get-all-data'),
+    path('get_data_speakertopics/', get_data_speakertopics, name='get_data_speakertopics'),
+    path('get_data_descriptivetitles/', get_data_descriptivetitles, name='get_data_descriptivetitles'),
 
 
 
