@@ -2,6 +2,21 @@ from rest_framework import serializers
 from SpeakerConnect.models import *
 
 
+class PersonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Person
+        fields = ('id', 'email', 'username', 'password')  
+        extra_kwargs = {
+            'password': {'write_only': True} 
+        }
+
+    def create(self, validated_data):
+        person = Person.objects.create(**validated_data)
+        return person
+
+
+
+
 class SpeakerTopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpeakerTopic
@@ -115,11 +130,6 @@ class SocialMediaPersonalSerializer(serializers.ModelSerializer):
 class BusinessInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = BusinessInfo
-        fields = '__all__'
-
-class PersonSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Person
         fields = '__all__'
 
 class SocialMediaBusinessSerializer(serializers.ModelSerializer):
