@@ -10,13 +10,14 @@ class Person(models.Model):
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
 
+    def save(self, *args, **kwargs):
+        if self.password:
+            self.set_password(self.password)
+        super().save(*args, **kwargs)
+
     def set_password(self, raw_password):
         # Hash and set the password
         self.password = make_password(raw_password)
-
-    def verify_password(self, raw_password):
-        # Verify the password
-        return check_password(raw_password, self.password)
 
 
     # speaker_contact_information = models.OneToOneField('SpeakerContactInformation', on_delete=models.CASCADE, related_name='person_speaker_contact_information',null=True,blank=True)
