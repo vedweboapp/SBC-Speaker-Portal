@@ -1661,7 +1661,7 @@ def get_all_data(request, person_id):
                 }
             }
 
-            for introduction in data.speaker_introduction:
+            for introduction in data.speaker_introduction.all():
                 at_events_data['meal_networking_session']['speaker_introduction'].append({
                     'id': introduction.id,
                     'introduction_text': introduction.introduction_text
