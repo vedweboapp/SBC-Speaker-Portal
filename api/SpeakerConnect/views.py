@@ -614,7 +614,7 @@ def create_image(request, person_id):
                     'own_rights': new_image.own_right,
                     'sbc_permissions': new_image.sbc_permission,
                     'image_url': f'{settings.MEDIA_URL}get_files/{new_image.image_name}',
-                    'crop_image_url': f'{settings.MEDIA_URL}get_files/{new_image.cropped_image_name}' if new_image.cropped_image_name else None,
+                    'src': f'{settings.MEDIA_URL}get_files/{new_image.cropped_image_name}' if new_image.cropped_image_name else None,
                     'image_name': new_image.image_name if image_binary else None,
                     'cropped_image_name': new_image.cropped_image_name if crop_image_binary else None,
                 })
@@ -1449,6 +1449,8 @@ def get_all_data(request, person_id):
                 'image_id': image.id,
                 'image_name': image.image_name,
                 'crop_image_name': image.cropped_image_name,
+                'image_url' : f'{settings.MEDIA_URL}get_files/{image.image_name}',
+                'src': f'{settings.MEDIA_URL}get_files/{image.cropped_image_name}' if image.cropped_image_name else None,
             }
 
             images.append(image_info)
