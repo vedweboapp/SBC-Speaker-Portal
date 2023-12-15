@@ -720,7 +720,8 @@ def create_books(request, person_id):
             cost_per_book_cad=book_data.get('book_cost', ''),
             bulk_order_purchase_offered=str(book_data.get('book_bulkorder', '')).lower() == 'true',
             price_per_book_cad=book_data.get('book_price', ''),
-            number_of_books=book_data.get('book_number', '')
+            number_of_books=book_data.get('book_number', ''),
+            person=person 
         )
 
         media_root = settings.MEDIA_ROOT
