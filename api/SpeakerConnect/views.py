@@ -155,7 +155,7 @@ def send_otp_to_email(email, otp):
     send_mail(
         'Your OTP for verification',
         f'Your OTP is: {otp}',
-        'pooja@weboappdiscovery.com',
+        'webotestuser02@gmail.com',
         [email],
         fail_silently=False,
     )
@@ -1703,13 +1703,15 @@ def get_all_data(request, person_id):
                 }
             }
 
+            speaker_introductions = []
             for introduction in data.speaker_introduction.all():
-                at_events_data['meal_networking_session']['speaker_introduction'].append({
+                speaker_introductions.append({
                     'id': introduction.id,
                     'introduction_text': introduction.introduction_text
                 })
 
-            at_events_data.append(at_events_data1)
+            at_events_data1['meal_networking_session']['speaker_introduction'] = speaker_introductions
+
 
 
         # Extract data for business information

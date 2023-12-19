@@ -354,8 +354,18 @@ class Images(models.Model):
     image_name = models.CharField(max_length=255)
     cropped_image_data = models.FileField(upload_to='get_files/')
     cropped_image_name = models.CharField(max_length=255)
-    own_right = models.BooleanField(default=False)
-    sbc_permission = models.BooleanField(default=False)
+    OWN_RIGHT_CHOICES = [
+        (False, 'No'),
+        (True, 'Yes'),
+    ]
+    own_right = models.BooleanField(choices=OWN_RIGHT_CHOICES, default=False)
+
+    SBC_PERMISSION_CHOICES = [
+        (False, 'No'),
+        (True, 'Yes'),
+    ]
+    sbc_permission = models.BooleanField(choices=SBC_PERMISSION_CHOICES, default=False)
+
 
     # Define a foreign key relationship with Person
     person = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='person_images',null=True,blank=True)
