@@ -155,7 +155,7 @@ def send_otp_to_email(email, otp):
     send_mail(
         'Your OTP for verification',
         f'Your OTP is: {otp}',
-        'pooja@weboappdiscovery.com',
+        'webotestuser02@gmail.com',
         [email],
         fail_silently=False,
     )

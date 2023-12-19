@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'corsheaders',
     'SpeakerConnect',
+    # 'document_management'
 ]
 
 MIDDLEWARE = [
@@ -164,8 +165,7 @@ SIMPLE_JWT = {
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  
 EMAIL_PORT = 587  
-EMAIL_HOST_USER = 'pooja@weboappdiscovery.com' 
-EMAIL_HOST_PASSWORD = 'zdau lszx cyvx bcvb' 
+EMAIL_HOST_USER = 'webotestuser02@gmail.com' 
+EMAIL_HOST_PASSWORD = 'nehu hqei ynps gnqw' 
 EMAIL_USE_TLS = True  
-
-DEFAULT_FROM_EMAIL = 'pooja@weboappdiscovery.com'
+DEFAULT_FROM_EMAIL = 'webotestuser02@gmail.com'
