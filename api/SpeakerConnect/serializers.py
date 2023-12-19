@@ -5,7 +5,7 @@ from SpeakerConnect.models import *
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
-        fields = ('id', 'email', 'username', 'password')  
+        fields = ('id', 'email', 'username', 'password' , 'dob', 'gender',)  
         extra_kwargs = {
             'password': {'write_only': True} 
         }
