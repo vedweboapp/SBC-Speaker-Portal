@@ -502,9 +502,9 @@ def create_biography(request, person_id):
         long_bio = request.data.get('Long_Bio')
         speaker_topics_additional_keywords = request.data.get('Additional_keywords')
         descriptive_title_type = request.data.get('Descriptive_title_type')
-        speaker_topics = request.data.getlist('speaker_topics')
-        speaker_tags = request.data.getlist('speaker_tags')
-        descriptive_titles = request.data.getlist('descriptive_titles')
+        speaker_topics = request.data.get('speaker_topics')  
+        speaker_tags = request.data.get('speaker_tags')  
+        descriptive_titles = request.data.get('descriptive_titles')  
         city = request.data.get('City')
         province_state = request.data.get('Province_State')
 
@@ -523,18 +523,24 @@ def create_biography(request, person_id):
             person=person
         )
 
-        for topic in speaker_topics:
+        for topic in str(speaker_topics).split(","):
             if speaker_topic_enum_dict.get(topic):
                 new_bio.speaker_topics.add(SpeakerTopic.objects.create(topic=topic))
+            else:
+                print(f"Invalid Speaker Topic: {topic}")
 
-        for tag in speaker_tags:
+        for tag in str(speaker_tags).split(","):
             validated_tag = speaker_tags_enum_dict.get(tag)
             if validated_tag:  
                 new_bio.speaker_tags.add(SpeakerTag.objects.create(tag=validated_tag))
+            else:
+                print(f"Invalid Speaker Tag: {tag}")
 
-        for title in descriptive_titles:
+        for title in str(descriptive_titles).split(","):
             if descriptive_titles_enum_dict.get(title):  
                 new_bio.descriptive_titles.add(DescriptiveTitles.objects.create(title=title))
+            else:
+                print(f"Invalid Descriptive Title: {title}")
 
         for file in microphone_files:
             new_bio.microphone.save(file.name, file, save=True)
