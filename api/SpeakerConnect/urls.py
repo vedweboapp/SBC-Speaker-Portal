@@ -43,6 +43,7 @@ router.register(r'descriptive-titles', DescriptiveTitlesViewSet)
 
 urlpatterns = [
     path('create_person/', views.create_person, name='create_person'),
+    path('verify_otp/', views.verify_otp, name='verify_otp'),
     path('login_person/', views.login, name='login'),
     path('stage1/<int:person_id>/', create_speaker_contact_info, name='create-speaker-contact-info'),
     path('stage2/<int:person_id>/', create_biography, name='create-biography'),

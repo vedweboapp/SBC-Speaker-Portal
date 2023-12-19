@@ -10,10 +10,11 @@ class PersonSerializer(serializers.ModelSerializer):
             'password': {'write_only': True} 
         }
 
-    def create(self, validated_data):
-        person = Person.objects.create(**validated_data)
-        return person
-
+    def validate(self, attrs):
+        password = attrs.get('password')
+        new_password = make_password(password)
+        attrs['password'] = new_password
+        return super().validate(attrs)
 
 
 
