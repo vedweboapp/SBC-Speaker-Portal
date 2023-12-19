@@ -1073,16 +1073,20 @@ def create_at_events(request, person_id):
 
         travel_agent_data = at_events_data.get('travel_agent', {})
         use_travel_agent = travel_agent_data.get('use_travel_agent', False)
-        Preferred_Seating = travel_agent_data.get('Preferred_Seating', '')
-        Preferred_Airline = travel_agent_data.get('Preferred_Airline', '')
-        West_Jet_number = travel_agent_data.get('West_Jet#', '')
-        Air_Canada_number = travel_agent_data.get('Air_Canada#', '')
-
+        Preferred_Seating = travel_agent_data.get('Preferred_Seating', None)  
+        Preferred_Airline = travel_agent_data.get('Preferred_Airline', None)  
+        West_Jet_number = travel_agent_data.get('West_Jet#', None) 
+        Air_Canada_number = travel_agent_data.get('Air_Canada#', None)
+        
+        # Assign values to at_events object
         at_events.use_travel_agent = use_travel_agent
         at_events.Preferred_Seating = Preferred_Seating
         at_events.Preferred_Airline = Preferred_Airline
         at_events.West_Jet_number = West_Jet_number
         at_events.Air_Canada_number = Air_Canada_number
+
+        at_events.save()
+
 
         # person.at_events = at_events
         # person.save()
@@ -1711,6 +1715,7 @@ def get_all_data(request, person_id):
                 })
 
             at_events_data1['meal_networking_session']['speaker_introduction'] = speaker_introductions
+            at_events_data.append(at_events_data1)
 
 
 
