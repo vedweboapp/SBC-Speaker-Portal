@@ -17,6 +17,8 @@ import base64
 from rest_framework import status
 from rest_framework.decorators import api_view
 from datetime import datetime
+from django.core.mail import send_mail
+
 
 
 class SpeakerTopicViewSet(viewsets.ModelViewSet):
@@ -145,8 +147,18 @@ def create_person(request):
     if serializer.is_valid():
         otp = ''.join(random.choices(string.digits, k=6))
         person = serializer.save(otp=otp, otp_verified=False)
+        send_otp_to_email(person.email, otp)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+def send_otp_to_email(email, otp):
+    send_mail(
+        'Your OTP for verification',
+        f'Your OTP is: {otp}',
+        'pooja@weboappdiscovery.com',
+        [email],
+        fail_silently=False,
+    )
 
 @api_view(['POST'])
 def login(request):

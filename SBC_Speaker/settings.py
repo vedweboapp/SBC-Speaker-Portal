@@ -160,3 +160,12 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1000000),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1000),
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  
+EMAIL_PORT = 587  
+EMAIL_HOST_USER = 'pooja@weboappdiscovery.com' 
+EMAIL_HOST_PASSWORD = 'zdau lszx cyvx bcvb' 
+EMAIL_USE_TLS = True  
+
+DEFAULT_FROM_EMAIL = 'pooja@weboappdiscovery.com'
