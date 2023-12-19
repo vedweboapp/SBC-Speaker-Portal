@@ -9,15 +9,22 @@ class Person(models.Model):
     email = models.CharField(max_length=255, unique=True)
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
+    otp = models.CharField(max_length=6, null=True, blank=True)
+    otp_verified = models.BooleanField()
 
-    def save(self, *args, **kwargs):
-        if self.password:
-            self.set_password(self.password)
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.password:
+    #         self.set_password(self.password)
+    #     super().save(*args, **kwargs)
 
-    def set_password(self, raw_password):
-        # Hash and set the password
-        self.password = make_password(raw_password)
+    # def set_password(self, raw_password):
+    #     print("here")
+    #     # Hash and set the password
+    #     self.password = make_password(raw_password)
+
+    # def set_otp(self, otp):
+    #     self.otp = otp
+    #     self.save(update_fields=['otp'])
 
 
     # speaker_contact_information = models.OneToOneField('SpeakerContactInformation', on_delete=models.CASCADE, related_name='person_speaker_contact_information',null=True,blank=True)

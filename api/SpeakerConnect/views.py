@@ -1,5 +1,7 @@
 import io
 import json
+import random
+import string
 import uuid
 from django.conf import settings
 from django.http import FileResponse
@@ -136,13 +138,13 @@ class SpeakerTagViewSet(viewsets.ModelViewSet):
 class DescriptiveTitlesViewSet(viewsets.ModelViewSet):
     queryset = DescriptiveTitles.objects.all()
     serializer_class = DescriptiveTitlesSerializer
-
-
+    
 @api_view(['POST'])
 def create_person(request):
     serializer = PersonSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        otp = ''.join(random.choices(string.digits, k=6))
+        person = serializer.save(otp=otp, otp_verified=False)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -156,10 +158,35 @@ def login(request):
     except Person.DoesNotExist:
         return Response("Invalid username or password", status=status.HTTP_401_UNAUTHORIZED)
 
-    if check_password(password, person.password):
-        return Response({"message": "Login successful!", "id": person.id}, status=status.HTTP_200_OK)
+    if person.otp_verified:
+        if check_password(password,person.password):
+            return Response({"message": "Login successful!", "id": person.id}, status=status.HTTP_200_OK)
+        else:
+            return Response("Invalid username or password", status=status.HTTP_401_UNAUTHORIZED)
     else:
-        return Response("Invalid username or password", status=status.HTTP_401_UNAUTHORIZED)
+        return Response("OTP verification required", status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+@api_view(['POST'])
+def verify_otp(request):
+    username = request.data.get('username')
+    otp_entered = request.data.get('otp')
+
+    try:
+        person = Person.objects.get(username=username)
+    except Person.DoesNotExist:
+        return Response("Invalid username", status=status.HTTP_401_UNAUTHORIZED)
+
+    if person.otp == otp_entered:
+        # OTP verification successful
+        person.otp_verified = True
+        person.save()
+        return Response({"message": "OTP verified"}, status=status.HTTP_200_OK)
+    else:
+        return Response("Invalid OTP", status=status.HTTP_401_UNAUTHORIZED)
+
+
 
 
 @api_view(['POST'])
@@ -1838,6 +1865,19 @@ def get_all_data(request, person_id):
                 'Link_to_Video': testimonial.link_to_video
             })
 
+        # Fetch videos created by the person
+        videos_data = []
+        videos = Video.objects.filter(person=person)
+        for video in videos:
+            videos_data.append({
+                'title': video.title,
+                'link': video.link,
+                'hd_quality': video.hd_quality,
+                'own_rights': video.own_rights,
+                'grant_permission': video.grant_permission,
+                'reason': video.reason
+            })
+
         response_data = {
             'person_id': serialized_data['id'],
             'email': serialized_data['email'],
@@ -1864,7 +1904,8 @@ def get_all_data(request, person_id):
             'social_media_business': social_media_business_data,
             'social_media_personal' : social_media_personal_data,
             'white_papers_case_studies': white_papers_case_studies_data,
-            'testimonials': testimonials_data
+            'testimonials': testimonials_data,
+            'videos': videos_data,
         }
 
         return Response(response_data, status=200)
