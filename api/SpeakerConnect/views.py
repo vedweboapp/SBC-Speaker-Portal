@@ -498,10 +498,6 @@ def create_biography(request, person_id):
 
         person = Person.objects.get(pk=person_id)
 
-        print("Received speaker_topics:", speaker_topics)
-        print("Received speaker_tags:", speaker_tags)
-        print("Received descriptive_titles:", descriptive_titles)
-
 
         new_bio = Biography.objects.create(
             highlight=highlight,
