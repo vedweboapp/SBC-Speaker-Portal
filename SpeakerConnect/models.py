@@ -6,9 +6,20 @@ from django.contrib.auth.hashers import make_password, check_password
 
 
 class Person(models.Model):
+    MALE = 'M'
+    FEMALE = 'F'
+    OTHER = 'O'
+
+    GENDER_CHOICES = [
+        (MALE, 'Male'),
+        (FEMALE, 'Female'),
+        (OTHER, 'Other'),
+    ]
     email = models.CharField(max_length=255, unique=True)
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
+    dob = models.DateField( null=True, blank=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
     otp = models.CharField(max_length=6, null=True, blank=True)
     otp_verified = models.BooleanField()
 
